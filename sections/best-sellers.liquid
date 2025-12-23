@@ -1,0 +1,80 @@
+<section class="best-sellers py-5">
+  <div class="container">
+
+    {% if section.settings.title != blank %}
+      <h2 class="mb-4 text-center">
+        {{ section.settings.title }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.collection != blank %}
+      <div class="row g-4">
+        {% for product in section.settings.collection.products limit: section.settings.limit %}
+          <div class="col-6 col-md-3">
+
+            <a
+              href="{{ product.url }}"
+              class="product-card d-block text-decoration-none"
+            >
+
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 400 }}"
+                  alt="{{ product.title }}"
+                  width="{{ product.featured_image.width }}"
+                  height="{{ product.featured_image.height }}"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                >
+              {% endif %}
+
+              <h3 class="product-card__title mb-1">
+                {{ product.title }}
+              </h3>
+
+              <p class="product-card__price">
+                {{ product.price | money }}
+              </p>
+
+            </a>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Best Sellers",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Best Sellers"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Number of products",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best Sellers"
+    }
+  ]
+}
+{% endschema %}

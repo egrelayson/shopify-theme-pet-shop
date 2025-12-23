@@ -9,12 +9,23 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "hero": {
+      "type": "hero-banner"
+    },
+    "collections": {
+      "type": "featured-collections"
+    },
+    "best": {
+      "type": "best-sellers"
+    },
+    "highlights": {
+      "type": "pet-highlights"
     }
   },
   "order": [
-    "main"
+    "hero",
+    "collections",
+    "best",
+    "highlights"
   ]
 }

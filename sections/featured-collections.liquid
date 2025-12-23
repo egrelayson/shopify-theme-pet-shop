@@ -1,0 +1,74 @@
+<section class="featured-collections py-5">
+  <div class="container">
+
+    {% if section.settings.title != blank %}
+      <h2 class="mb-4 text-center">
+        {{ section.settings.title }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.collections != blank %}
+      <div class="row g-4">
+        {% for collection in section.settings.collections limit: section.settings.limit %}
+          <div class="col-12 col-md-4">
+            <a
+              href="{{ collection.url }}"
+              class="collection-card d-block text-decoration-none"
+            >
+
+              {% if collection.image %}
+                <img
+                  src="{{ collection.image | image_url: width: 600 }}"
+                  alt="{{ collection.title }}"
+                  width="{{ collection.image.width }}"
+                  height="{{ collection.image.height }}"
+                  class="img-fluid mb-3"
+                  loading="lazy"
+                >
+              {% endif %}
+
+              <h3 class="collection-card__title">
+                {{ collection.title }}
+              </h3>
+
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Collections"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Number of collections",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections"
+    }
+  ]
+}
+{% endschema %}

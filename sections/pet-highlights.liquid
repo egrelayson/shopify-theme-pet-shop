@@ -1,0 +1,31 @@
+<section>
+  <div class="container">
+    <h2>{{ section.settings.title }}</h2>
+
+    <ul>
+      {% for block in section.blocks %}
+        <li>{{ block.settings.text }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Pet Highlights",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Why Pet Owners Trust Us" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Highlight",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Pet Highlights" }]
+}
+{% endschema %}

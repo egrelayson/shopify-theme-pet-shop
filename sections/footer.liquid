@@ -1,56 +1,40 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
+<footer class="site-footer py-4 border-top">
+  <div class="container">
+    <div class="row align-items-center text-center text-md-start">
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+      <!-- Copyright -->
+      <div class="col-md-6 mb-3 mb-md-0">
+        <p class="site-footer__copyright mb-0">
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+        </p>
+      </div>
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+      <!-- Footer navigation -->
+      <div class="col-md-6">
+        {% if linklists.footer-menu.links.size > 0 %}
+          <ul class="site-footer__nav list-unstyled d-flex justify-content-center justify-content-md-end mb-0 gap-3">
+            {% for link in linklists.footer-menu.links %}
+              <li>
+                <a href="{{ link.url }}" class="site-footer__link">
+                  {{ link.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+    </div>
   </div>
 </footer>
 
-{% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-  }
-  footer a {
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  footer .footer__links,
-  footer .footer__payment {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
-
 {% schema %}
 {
-  "name": "t:general.footer",
-  "settings": [
+  "name": "Footer",
+  "settings": [],
+  "presets": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
-      "default": true
+      "name": "Footer"
     }
   ]
 }
