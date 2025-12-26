@@ -10,16 +10,48 @@
 {
   "sections": {
     "hero": {
-      "type": "hero-banner"
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Premium Care for Pets",
+        "subheading": "Thoughtfully curated products for cats & dogs.",
+        "cta_label": "Shop now",
+        "cta_link": ""
+      }
     },
     "collections": {
-      "type": "featured-collections"
+      "type": "featured-collections",
+      "settings": {
+        "title": "Shop by Category",
+        "collections": [],
+        "limit": 3
+      }
     },
     "best": {
-      "type": "best-sellers"
+      "type": "best-sellers",
+      "settings": {
+        "title": "Best Sellers",
+        "collection": "active-paw-collective",
+        "limit": 4
+      }
     },
     "highlights": {
-      "type": "pet-highlights"
+      "type": "pet-highlights",
+      "blocks": {
+        "item_9HfxJj": {
+          "type": "item",
+          "settings": {
+            "icon_name": "star",
+            "heading": "Premium Quality",
+            "text": "We use only vet-approved materials for your furry friends."
+          }
+        }
+      },
+      "block_order": [
+        "item_9HfxJj"
+      ],
+      "settings": {
+        "title": "Why Pet Owners Trust Us"
+      }
     }
   },
   "order": [
