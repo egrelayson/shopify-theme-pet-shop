@@ -22,8 +22,11 @@
       "type": "featured-collections",
       "settings": {
         "title": "Shop by Category",
-        "collections": [],
-        "limit": 3
+        "collections": [
+          "active-paw-collective",
+          "whisker-willow"
+        ],
+        "limit": 2
       }
     },
     "best": {
