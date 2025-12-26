@@ -1,49 +1,102 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+  Product main section
+  - Displays gallery, title, price, description
+  - Includes variant selector and add-to-cart form
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
+<section class="product-section container">
+  <div class="product-grid">
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
-
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
-
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
+    <!-- PRODUCT MEDIA -->
+    <div class="product-media">
+      {% for media in product.media %}
+        {% case media.media_type %}
+          {% when 'image' %}
+            <img
+              src="{{ media | image_url: width: 800 }}"
+              alt="{{ media.alt | escape }}"
+              width="{{ media.width }}"
+              height="{{ media.height }}"
+              loading="lazy"
+              class="product-image"
+            >
+        {% endcase %}
       {% endfor %}
-    </select>
+    </div>
 
-    <input type="text" name="quantity" min="1" value="1">
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <h1 class="product-title">{{ product.title }}</h1>
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
-</div>
+      <p class="product-price">
+        {{ product.selected_or_first_available_variant.price | money }}
+      </p>
+
+      {% if product.description != blank %}
+        <div class="product-description">
+          {{ product.description }}
+        </div>
+      {% endif %}
+
+      <!-- PRODUCT FORM -->
+      {% form 'product', product, class: 'product-form' %}
+        {% assign current_variant = product.selected_or_first_available_variant %}
+
+        {% if product.variants.size > 1 %}
+          <label for="variant-select">Variant</label>
+          <select name="id" id="variant-select">
+            {% for variant in product.variants %}
+              <option
+                value="{{ variant.id }}"
+                {% if variant.id == current_variant.id %}
+                  selected
+                {% endif %}
+                {% unless variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                {{ variant.title }}
+                {% unless variant.available %} (Sold out){% endunless %}
+              </option>
+            {% endfor %}
+          </select>
+        {% else %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {% endif %}
+
+        <label for="quantity">Quantity</label>
+        <input
+          id="quantity"
+          type="number"
+          name="quantity"
+          min="1"
+          value="1"
+        >
+
+        <button
+          type="submit"
+          class="btn-add-to-cart"
+          {% unless current_variant.available %}
+            disabled
+          {% endunless %}
+        >
+          {% if current_variant.available %}
+            Add to cart
+          {% else %}
+            Sold out
+          {% endif %}
+        </button>
+
+        {{ form | payment_button }}
+      {% endform %}
+    </div>
+
+  </div>
+</section>
 
 {% schema %}
 {
-  "name": "t:general.product",
+  "name": "Product",
   "settings": [],
   "disabled_on": {
     "groups": ["header", "footer"]

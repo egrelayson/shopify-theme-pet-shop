@@ -1,27 +1,40 @@
-/* =========================
-   Design Tokens (MVP)
-========================= */
+/* =====================================================
+   Design Tokens (MVP – Clean & Scalable)
+===================================================== */
 
 :root {
-  /* Colors */
+  /* ---------- Colors ---------- */
   --color-bg: #ffffff;
-  --color-text: #1f2933;
+  --color-text: #111827;
   --color-muted: #6b7280;
-  --color-primary: #2f6fed;
-  --color-border: #e5e7eb;
-  --color-accent: #2f6fed;
 
-  /* Typography */
+  --color-primary: #1a56db;
+  --color-primary-hover: #1e429f;
+
+  --color-accent: #facc15;
+  --color-accent-hover: #eab308;
+
+  --color-border: #e5e7eb;
+
+  --color-on-primary: #ffffff;
+  --color-on-accent: #111827;
+
+  /* ---------- Typography ---------- */
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: 'Inter', system-ui, sans-serif;
 
-  /* Layout */
-  --radius: 12px;
+  /* ---------- Layout ---------- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
 }
 
-/* =========================
+/* =====================================================
    Base Reset
-========================= */
+===================================================== */
 
 *,
 *::before,
@@ -35,16 +48,19 @@ body {
   color: var(--color-text);
   background-color: var(--color-bg);
   line-height: 1.6;
+  padding-top: 55px; /* Sticky header offset */
+  -webkit-font-smoothing: antialiased;
 }
 
-/* =========================
+/* =====================================================
    Typography
-========================= */
+===================================================== */
 
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5 {
   font-family: var(--font-heading);
   font-weight: 600;
   line-height: 1.25;
@@ -56,9 +72,14 @@ p {
   color: var(--color-muted);
 }
 
-/* =========================
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* =====================================================
    Header
-========================= */
+===================================================== */
 
 .site-header {
   background-color: var(--color-bg);
@@ -66,21 +87,24 @@ p {
 
 .site-header .navbar-brand {
   font-size: 1.25rem;
+  font-weight: 600;
   letter-spacing: 0.02em;
 }
 
 .site-header .nav-link {
   color: var(--color-text);
   font-weight: 500;
+  transition: color var(--transition-fast);
 }
 
-.site-header .nav-link:hover {
-  color: var(--color-accent);
+.site-header .nav-link:hover,
+.site-header .nav-link:focus {
+  color: var(--color-primary);
 }
 
-/* =========================
+/* =====================================================
    Hero
-========================= */
+===================================================== */
 
 .hero {
   background-color: #f8f9fa;
@@ -97,33 +121,15 @@ p {
 
 .hero__cta {
   padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-md);
   border: 1px solid currentColor;
   background: transparent;
   font-weight: 500;
-  border-radius: var(--radius);
 }
 
-/* =========================
-   Footer
-========================= */
-
-.site-footer {
-  background-color: var(--color-bg);
-  font-size: 0.875rem;
-}
-
-.site-footer__link {
-  color: inherit;
-  text-decoration: none;
-}
-
-.site-footer__link:hover {
-  text-decoration: underline;
-}
-
-/* =========================
-   Buttons (MVP)
-========================= */
+/* =====================================================
+   Buttons (Theme Layer over Bootstrap)
+===================================================== */
 
 .btn {
   display: inline-flex;
@@ -131,37 +137,41 @@ p {
   justify-content: center;
 
   padding: 0.75rem 1.75rem;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
 
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 500;
   line-height: 1;
 
-  text-decoration: none;
   cursor: pointer;
-
   border: 1px solid transparent;
-  background: transparent;
-  color: var(--color-text);
 
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
-/* Primary button */
+.btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Primary */
 .btn-primary {
   background-color: var(--color-primary);
-  color: #ffffff;
+  color: var(--color-on-primary);
   border-color: var(--color-primary);
 }
 
 .btn-primary:hover {
-  background-color: #1f5edb;
-  border-color: #1f5edb;
-  color: #ffffff;
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
-/* Outline / secondary button */
+/* Outline */
 .btn-outline {
   background-color: transparent;
   color: var(--color-text);
@@ -172,42 +182,125 @@ p {
   background-color: var(--color-border);
 }
 
-/* Disabled state */
+/* Disabled */
 .btn[disabled],
 .btn.disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
-/* =========================
-   Collection Cards
-========================= */
+/* =====================================================
+   Cards (Shared Behavior)
+===================================================== */
 
-.collection-card img {
-  border-radius: var(--radius);
+.card {
+  border-radius: var(--radius-md);
 }
 
-.collection-card__title {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--color-text);
+/* =====================================================
+   Product Cards
+===================================================== */
+
+.product-card {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-/* =========================
-   Product Cards (MVP)
-========================= */
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
 
 .product-card img {
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
 }
 
 .product-card__title {
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--color-text);
 }
 
 .product-card__price {
   font-size: 0.875rem;
   color: var(--color-muted);
+}
+
+/* =====================================================
+   Collection Description
+===================================================== */
+
+.collection__description {
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+/* =====================================================
+   Featured Collections
+===================================================== */
+
+.collection-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  outline-offset: 4px;
+}
+
+.collection-card:focus-visible {
+  outline: 3px solid var(--color-primary);
+}
+
+.collection-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.collection-card__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  padding: 1.5rem;
+  color: #ffffff;
+
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0) 65%
+  );
+
+  transition: background var(--transition-base);
+}
+
+.collection-card:hover .collection-card__image {
+  transform: scale(1.08);
+}
+
+.collection-card:hover .collection-card__overlay {
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+}
+
+/* =====================================================
+   Footer
+===================================================== */
+
+.site-footer {
+  background-color: var(--color-bg);
+  font-size: 0.875rem;
+}
+
+.site-footer__link {
+  color: inherit;
+}
+
+.site-footer__link:hover {
+  text-decoration: underline;
 }

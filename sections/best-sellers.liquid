@@ -1,45 +1,103 @@
-<section class="best-sellers py-5">
+{% comment %}
+  Best Sellers – Premium Product Grid
+  Enhancements:
+  - CLS-safe images
+  - Accessible badges & links
+  - Cleaner hover behavior
+  - Editor-friendly empty states
+{% endcomment %}
+
+<section class="best-sellers py-5 bg-white">
   <div class="container">
 
     {% if section.settings.title != blank %}
-      <h2 class="mb-4 text-center">
-        {{ section.settings.title }}
-      </h2>
+      <header class="text-center mb-5">
+        <h2 class="display-6 fw-semibold mb-1">
+          {{ section.settings.title }}
+        </h2>
+        <p class="text-muted small text-uppercase tracking-wider">
+          Handpicked for your pets
+        </p>
+      </header>
     {% endif %}
 
     {% if section.settings.collection != blank %}
-      <div class="row g-4">
+      <div class="row g-3 g-md-4">
         {% for product in section.settings.collection.products limit: section.settings.limit %}
-          <div class="col-6 col-md-3">
+          {% if product.compare_at_price > product.price %}
+            {% assign on_sale = true %}
+          {% else %}
+            {% assign on_sale = false %}
+          {% endif %}
+          <div class="col-6 col-lg-3">
+            <article class="product-card card h-100 border-0 shadow-sm position-relative">
 
-            <a
-              href="{{ product.url }}"
-              class="product-card d-block text-decoration-none"
-            >
-
-              {% if product.featured_image %}
-                <img
-                  src="{{ product.featured_image | image_url: width: 400 }}"
-                  alt="{{ product.title }}"
-                  width="{{ product.featured_image.width }}"
-                  height="{{ product.featured_image.height }}"
-                  class="img-fluid mb-3"
-                  loading="lazy"
+              {% if on_sale %}
+                <span
+                  class="badge bg-danger position-absolute top-0 start-0 m-3 z-1"
+                  aria-label="On sale"
                 >
+                  Sale
+                </span>
               {% endif %}
 
-              <h3 class="product-card__title mb-1">
-                {{ product.title }}
-              </h3>
+              <!-- Product Image -->
+              <a
+                href="{{ product.url }}"
+                class="product-card__media d-block overflow-hidden rounded-3"
+                aria-label="View {{ product.title }}"
+              >
+                <div class="ratio ratio-1x1">
+                  {% if product.featured_image %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 600 }}"
+                      alt="{{ product.featured_image.alt | escape | default: product.title }}"
+                      width="600"
+                      height="600"
+                      loading="lazy"
+                      class="product-card__image"
+                    >
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'bg-light w-100 h-100' }}
+                  {% endif %}
+                </div>
+              </a>
 
-              <p class="product-card__price">
-                {{ product.price | money }}
-              </p>
+              <!-- Product Info -->
+              <div class="card-body px-0 pt-3 d-flex flex-column">
+                <h3 class="h6 fw-semibold mb-1 text-truncate">
+                  <a href="{{ product.url }}" class="text-decoration-none text-dark">
+                    {{ product.title }}
+                  </a>
+                </h3>
 
-            </a>
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="fw-semibold text-primary">
+                    {{ product.price | money }}
+                  </span>
 
+                  {% if on_sale %}
+                    <span class="text-muted text-decoration-line-through small">
+                      {{ product.compare_at_price | money }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <a
+                  href="{{ product.url }}"
+                  class="btn btn-sm btn-outline w-100 mt-auto product-card__cta"
+                >
+                  View details
+                </a>
+              </div>
+
+            </article>
           </div>
         {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info text-center small">
+        Select a collection to display best sellers.
       </div>
     {% endif %}
 

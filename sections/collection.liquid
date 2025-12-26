@@ -1,47 +1,59 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
+  Collection template section
+  Renders product grid for a collection page
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+<section class="collection py-5">
+  <div class="container">
+    <header class="mb-4 text-center">
+      <h1 class="collection__title">{{ collection.title }}</h1>
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
+      {% if collection.description != blank %}
+        <p class="collection__description text-muted">
+          {{ collection.description }}
+        </p>
+      {% endif %}
+    </header>
+
+    {% paginate collection.products by 20 %}
+      <div class="row g-4">
+        {% for product in collection.products %}
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="product-card h-100">
+              <a href="{{ product.url }}" class="product-card__image d-block mb-3">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 400 }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    width="400"
+                    height="400"
+                    class="img-fluid rounded"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </a>
+
+              <div class="product-card__content">
+                <h3 class="product-card__title h6 mb-1">
+                  <a href="{{ product.url }}" class="text-decoration-none text-body">
+                    {{ product.title }}
+                  </a>
+                </h3>
+
+                <p class="product-card__price fw-medium mb-0">
+                  {{ product.price | money }}
+                </p>
+              </div>
+            </article>
+          </div>
+        {% endfor %}
       </div>
-    {% endfor %}
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
-</div>
-
-{% stylesheet %}
-  .collection-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-  }
-{% endstylesheet %}
-
-{% schema %}
-{
-  "name": "t:general.collection",
-  "settings": []
-}
-{% endschema %}
+      <div class="mt-5 d-flex justify-content-center">
+        {{ paginate | default_pagination }}
+      </div>
+    {% endpaginate %}
+  </div>
+</section>

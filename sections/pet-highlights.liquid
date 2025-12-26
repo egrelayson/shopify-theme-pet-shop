@@ -1,31 +1,146 @@
-<section>
-  <div class="container">
-    <h2>{{ section.settings.title }}</h2>
+{% comment %}
+  Enhanced Pet Highlights Section
+  Bootstrap 5 Cards + Bootstrap Icons
+{% endcomment %}
 
-    <ul>
+<section class="pet-highlights py-5 bg-light">
+  <div class="container">
+
+    <!-- Section Header -->
+    {% if section.settings.title != blank %}
+      <div class="row mb-5">
+        <div class="col-12 text-center">
+          <h2 class="display-5 fw-bold text-dark">
+            {{ section.settings.title }}
+          </h2>
+          <div class="mx-auto mt-2 bg-primary pet-divider"></div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Highlights Grid -->
+    <div class="row g-4 justify-content-center">
       {% for block in section.blocks %}
-        <li>{{ block.settings.text }}</li>
+        <div class="col-md-6 col-lg-4" {{ block.shopify_attributes }}>
+          <div class="card h-100 border-0 shadow-sm p-4 text-center pet-transition">
+
+            {% if block.settings.icon_name != blank %}
+              <div class="mb-3 text-primary">
+                <i
+                  class="bi bi-{{ block.settings.icon_name }} display-4"
+                  aria-hidden="true">
+                </i>
+              </div>
+            {% endif %}
+
+            <div class="card-body p-0">
+              {% if block.settings.heading != blank %}
+                <h3 class="h5 fw-bold mb-2">
+                  {{ block.settings.heading }}
+                </h3>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                <p class="text-secondary mb-0 small">
+                  {{ block.settings.text }}
+                </p>
+              {% endif %}
+            </div>
+
+          </div>
+        </div>
       {% endfor %}
-    </ul>
+    </div>
+
   </div>
 </section>
 
+<style>
+  .pet-highlights .pet-transition {
+    transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+  }
+
+  .pet-highlights .pet-transition:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.1);
+  }
+
+  .pet-highlights .pet-divider {
+    height: 4px;
+    width: 60px;
+    border-radius: 2px;
+  }
+</style>
 
 {% schema %}
 {
   "name": "Pet Highlights",
+  "max_blocks": 6,
   "settings": [
-    { "type": "text", "id": "title", "label": "Title", "default": "Why Pet Owners Trust Us" }
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Why Pet Owners Trust Us"
+    }
   ],
   "blocks": [
     {
       "type": "item",
       "name": "Highlight",
       "settings": [
-        { "type": "text", "id": "text", "label": "Text" }
+        {
+          "type": "text",
+          "id": "icon_name",
+          "label": "Bootstrap Icon Name",
+          "info": "Example: heart, truck, shield-check",
+          "default": "star"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Premium Quality"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "We use only vet-approved materials for your furry friends."
+        }
       ]
     }
   ],
-  "presets": [{ "name": "Pet Highlights" }]
+  "presets": [
+    {
+      "name": "Pet Highlights",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "icon_name": "truck",
+            "heading": "Fast Delivery",
+            "text": "Quick and reliable shipping straight to your doorstep."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon_name": "heart",
+            "heading": "Made with Love",
+            "text": "Designed by pet lovers who truly care."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon_name": "shield-check",
+            "heading": "Secure Payments",
+            "text": "Your transactions are protected and encrypted."
+          }
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}

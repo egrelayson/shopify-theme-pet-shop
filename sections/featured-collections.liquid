@@ -1,42 +1,71 @@
-<section class="featured-collections py-5">
-  <div class="container">
+{% comment %}
+  Featured Collections – Premium Overlay Grid
+  Enhancements:
+  - Accessible focus styles
+  - CLS-safe images
+  - Editor-friendly empty states
+  - Subtle premium motion
+{% endcomment %}
 
+<section class="featured-collections py-5 bg-white">
+  <div class="container">
     {% if section.settings.title != blank %}
-      <h2 class="mb-4 text-center">
-        {{ section.settings.title }}
-      </h2>
+      <header class="text-center mb-5">
+        <h2 class="display-6 fw-semibold mb-2">
+          {{ section.settings.title }}
+        </h2>
+        <span
+          class="d-inline-block bg-primary rounded-pill"
+          style="width: 48px; height: 3px;"
+        ></span>
+      </header>
     {% endif %}
 
-    {% if section.settings.collections != blank %}
-      <div class="row g-4">
+    <div class="row g-3 g-md-4">
+      {% if section.settings.collections != blank %}
         {% for collection in section.settings.collections limit: section.settings.limit %}
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-6 col-lg-4">
             <a
               href="{{ collection.url }}"
-              class="collection-card d-block text-decoration-none"
+              class="collection-card card border-0 overflow-hidden shadow-sm h-100 text-white"
+              aria-label="View {{ collection.title }} collection"
             >
+              <!-- Aspect Ratio Wrapper -->
+              <div class="ratio ratio-16x9">
+                {% if collection.featured_image %}
+                  <img
+                    src="{{ collection.featured_image | image_url: width: 900 }}"
+                    alt="{{ collection.featured_image.alt | escape | default: collection.title }}"
+                    width="900"
+                    height="506"
+                    loading="lazy"
+                    class="collection-card__image"
+                  >
+                {% else %}
+                  {{ 'collection-1' | placeholder_svg_tag: 'bg-secondary opacity-25 w-100 h-100' }}
+                {% endif %}
+              </div>
 
-              {% if collection.image %}
-                <img
-                  src="{{ collection.image | image_url: width: 600 }}"
-                  alt="{{ collection.title }}"
-                  width="{{ collection.image.width }}"
-                  height="{{ collection.image.height }}"
-                  class="img-fluid mb-3"
-                  loading="lazy"
-                >
-              {% endif %}
-
-              <h3 class="collection-card__title">
-                {{ collection.title }}
-              </h3>
-
+              <!-- Overlay -->
+              <div class="collection-card__overlay d-flex flex-column justify-content-end p-4">
+                <h3 class="h5 fw-semibold mb-1">
+                  {{ collection.title }}
+                </h3>
+                <span class="small opacity-75"> {{ collection.all_products_count }} products → </span>
+              </div>
             </a>
           </div>
         {% endfor %}
-      </div>
-    {% endif %}
-
+      {% else %}
+        {% for i in (1..3) %}
+          <div class="col-12 col-md-4">
+            <div class="ratio ratio-16x9 bg-light border rounded d-flex align-items-center justify-content-center text-muted small">
+              Select a collection
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
   </div>
 </section>
 

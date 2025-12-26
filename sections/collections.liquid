@@ -1,83 +1,103 @@
 {% comment %}
-  This section is used in the list-collections template to render a list of
-  collections.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+  Enhanced List Collections with Bootstrap 5
+  Renders all store collections in a responsive card grid.
 {% endcomment %}
 
-<h1>{{ 'collections.title' | t }}</h1>
+<section class="collections-list-section py-5">
+  <div class="container">
+    
+    <!-- Section Header -->
+    <header class="text-center mb-5">
+      <h1 class="display-5 fw-bold">{{ 'collections.title' | t }}</h1>
+      <p class="text-muted">Explore our curated selections for your pets</p>
+    </header>
 
-<div
-  class="collections {{ section.settings.grid_item_width }}"
-  style="--grid-gap: {{ section.settings.grid_gap }}px"
->
-  {% for collection in collections %}
-    <a class="collection-card" href="{{ collection.url }}">
-      {% if collection.featured_image %}
-        {% render 'image',
-          class: 'collection-card__image',
-          image: collection.featured_image,
-          width: 600,
-          height: 600,
-          crop: 'center'
-        %}
-      {% endif %}
+    <!-- Collections Grid -->
+    <div class="row g-{{ section.settings.grid_gap_mobile }} g-lg-{{ section.settings.grid_gap_desktop }}">
+      {% for collection in collections %}
+        <div class="col-sm-6 {{ section.settings.grid_item_width }}">
+          <a href="{{ collection.url }}" class="card h-100 shadow-sm text-decoration-none border-0 transition-hover">
+            
+            <!-- Collection Image with 1:1 Aspect Ratio -->
+            <div class="ratio ratio-1x1 overflow-hidden">
+              {% if collection.featured_image %}
+                {{ collection.featured_image | image_url: width: 600 | image_tag: 
+                  class: 'card-img-top object-fit-cover', 
+                  loading: 'lazy', 
+                  alt: collection.title 
+                }}
+              {% else %}
+                {{ 'collection-1' | placeholder_svg_tag: 'card-img-top bg-light' }}
+              {% endif %}
+            </div>
 
-      <div class="collection-card__content">
-        <p>{{ collection.title }}</p>
+            <!-- Card Body -->
+            <div class="card-body text-center d-flex flex-column justify-content-center">
+              <h3 class="h5 card-title fw-bold text-dark mb-2">{{ collection.title }}</h3>
+              
+              {% if collection.description != blank %}
+                <p class="card-text text-secondary small px-2">
+                  {{ collection.description | strip_html | truncatewords: 12 }}
+                </p>
+              {% endif %}
+              
+              <span class="btn btn-outline-primary btn-sm mt-3 align-self-center">
+                View Collection
+              </span>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
-        {% if collection.description %}
-          <p>{{ collection.description | strip_html | truncatewords: 15 }}</p>
-        {% endif %}
-      </div>
-    </a>
-  {% endfor %}
-</div>
-
-{% stylesheet %}
-  .collections {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
-    gap: var(--grid-gap);
+<style>
+  .transition-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-  .collections--compact {
-    --collection-card-size: 160px;
+  .transition-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
   }
-  .collections--full {
-    --collection-card-size: 280px;
+  .object-fit-cover {
+    object-fit: cover;
   }
-  .collection-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-{% endstylesheet %}
+</style>
 
 {% schema %}
 {
-  "name": "t:general.collections_grid",
+  "name": "Collections Grid",
   "settings": [
     {
       "type": "select",
       "id": "grid_item_width",
-      "label": "t:labels.grid_item_width",
+      "label": "Desktop Columns",
       "options": [
-        { "value": "collections--compact", "label": "t:options.size.small" },
-        { "value": "collections--full", "label": "t:options.size.large" }
+        { "value": "col-lg-4", "label": "3 Columns" },
+        { "value": "col-lg-3", "label": "4 Columns" }
       ],
-      "default": "collections--full"
+      "default": "col-lg-4"
     },
     {
       "type": "range",
-      "id": "grid_gap",
-      "label": "t:labels.grid_gap",
-      "min": 0,
-      "max": 50,
-      "step": 5,
-      "unit": "px",
-      "default": 10
+      "id": "grid_gap_desktop",
+      "label": "Desktop Gap",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "grid_gap_mobile",
+      "label": "Mobile Gap",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 3
     }
   ],
-  "presets": [{ "name": "t:general.collections_grid" }]
+  "presets": [{ "name": "Collections Grid" }]
 }
 {% endschema %}
