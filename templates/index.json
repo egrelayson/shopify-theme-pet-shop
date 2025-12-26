@@ -34,21 +34,40 @@
         "limit": 4
       }
     },
-    "highlights": {
+    "pet_highlights_qpqAgk": {
       "type": "pet-highlights",
       "blocks": {
-        "item_9HfxJj": {
+        "item_n73wtf": {
           "type": "item",
           "settings": {
-            "icon_name": "star",
-            "heading": "Premium Quality",
-            "text": "We use only vet-approved materials for your furry friends."
+            "icon_name": "truck",
+            "heading": "Fast Delivery",
+            "text": "Quick and reliable shipping straight to your doorstep."
+          }
+        },
+        "item_8Pfdij": {
+          "type": "item",
+          "settings": {
+            "icon_name": "heart",
+            "heading": "Made with Love",
+            "text": "Designed by pet lovers who truly care."
+          }
+        },
+        "item_rbiJMV": {
+          "type": "item",
+          "settings": {
+            "icon_name": "shield-check",
+            "heading": "Secure Payments",
+            "text": "Your transactions are protected and encrypted."
           }
         }
       },
       "block_order": [
-        "item_9HfxJj"
+        "item_n73wtf",
+        "item_8Pfdij",
+        "item_rbiJMV"
       ],
+      "name": "Pet Highlights",
       "settings": {
         "title": "Why Pet Owners Trust Us"
       }
@@ -58,6 +77,6 @@
     "hero",
     "collections",
     "best",
-    "highlights"
+    "pet_highlights_qpqAgk"
   ]
 }
